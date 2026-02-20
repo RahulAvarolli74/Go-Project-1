@@ -1,0 +1,28 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Database
+*.db
+
+# Environment
+.env
+
+# Uploads
+public/temp/*
+!public/temp/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+# design.md
+explaination.md
+
+# Go
+vendor/

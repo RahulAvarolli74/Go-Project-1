@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "recipe-api-collection",
+		"name": "Recipe Sharing API",
+		"description": "Complete API collection for the Recipe Sharing API with Image Upload. Built with Go (Gin + GORM + SQLite).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "recipeId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health"]
+						},
+						"description": "Check if the API server is running and healthy."
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data) {",
+									"    pm.collectionVariables.set('userId', jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"chef_john\",\n    \"email\": \"john@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Register a new user. The user ID is auto-saved to the collection variable."
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Get a user's profile including their recipes."
+					}
+				}
+			]
+		},
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Create Recipe (with image)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data) {",
+									"    pm.collectionVariables.set('recipeId', jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Spaghetti Bolognese",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Classic Italian pasta with rich meat sauce",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[\"spaghetti\",\"tomato\",\"ground beef\",\"onion\",\"garlic\",\"olive oil\",\"basil\"]",
+									"type": "text"
+								},
+								{
+									"key": "prep_time",
+									"value": "15",
+									"type": "text"
+								},
+								{
+									"key": "cook_time",
+									"value": "30",
+									"type": "text"
+								},
+								{
+									"key": "servings",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "{{userId}}",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "",
+									"description": "Select a JPEG or PNG image file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes"]
+						},
+						"description": "Create a new recipe with optional image upload. Uses multipart/form-data."
+					}
+				},
+				{
+					"name": "Create Recipe (no image)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data) {",
+									"    pm.collectionVariables.set('recipeId', jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Tomato Soup",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "A warm and comforting tomato soup",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[\"tomato\",\"onion\",\"garlic\",\"cream\",\"salt\",\"pepper\"]",
+									"type": "text"
+								},
+								{
+									"key": "prep_time",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "cook_time",
+									"value": "25",
+									"type": "text"
+								},
+								{
+									"key": "servings",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "{{userId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes"]
+						},
+						"description": "Create a recipe without an image."
+					}
+				},
+				{
+					"name": "Get All Recipes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes?page=1&per_page=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get all recipes with pagination support."
+					}
+				},
+				{
+					"name": "Get Recipe by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/{{recipeId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "{{recipeId}}"]
+						},
+						"description": "Get a single recipe with its ratings."
+					}
+				},
+				{
+					"name": "Search Recipes by Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/search?ingredients=tomato,garlic",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "search"],
+							"query": [
+								{
+									"key": "ingredients",
+									"value": "tomato,garlic"
+								}
+							]
+						},
+						"description": "Search for recipes containing any of the specified ingredients (comma-separated)."
+					}
+				},
+				{
+					"name": "Update Recipe",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Spaghetti Bolognese\",\n    \"description\": \"My improved version with secret ingredients\",\n    \"servings\": 6\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/{{recipeId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "{{recipeId}}"]
+						},
+						"description": "Update specific fields of a recipe (partial update)."
+					}
+				},
+				{
+					"name": "Delete Recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/{{recipeId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "{{recipeId}}"]
+						},
+						"description": "Delete a recipe and all its associated ratings."
+					}
+				}
+			]
+		},
+		{
+			"name": "Ratings",
+			"item": [
+				{
+					"name": "Add Rating to Recipe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\": \"foodie_jane\",\n    \"score\": 5,\n    \"comment\": \"Absolutely delicious! Best recipe I have tried.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/{{recipeId}}/ratings",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "{{recipeId}}", "ratings"]
+						},
+						"description": "Add a rating (1-5 stars) with an optional comment to a recipe."
+					}
+				},
+				{
+					"name": "Get Ratings for Recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/{{recipeId}}/ratings",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recipes", "{{recipeId}}", "ratings"]
+						},
+						"description": "Get all ratings for a specific recipe, including the average rating."
+					}
+				}
+			]
+		}
+	]
+}
