@@ -22,7 +22,7 @@ public/temp/*
 .DS_Store
 Thumbs.db
 # design.md
-explaination.md
+explanation.md
 
 # Go
 vendor/
