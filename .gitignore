@@ -16,6 +16,7 @@ public/temp/*
 
 # IDE
 .vscode/
+env_changes.md
 .idea/
 
 # OS
